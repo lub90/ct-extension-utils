@@ -1,17 +1,18 @@
-import type { GlobalPermissions } from '../utils/ct-types.d'
-import { AppConfig } from '../AppConfig'
+import type { GlobalPermissions } from '@/utils/ct-types.d'
 
 export class Permissions {
 
   private readonly churchtoolsClient: any
+  private readonly extensionKey: string
   private globalPermissions: GlobalPermissions | null;
 
-  constructor(churchtoolsClient: any) {
+  constructor(churchtoolsClient: any, extensionKey: string) {
     this.churchtoolsClient = churchtoolsClient;
+    this.extensionKey = extensionKey;
     this.globalPermissions = null;
   }
 
-  async fetchGlobalPermissions(): Promise<any | null> {
+  async fetchGlobalPermissions(): Promise<GlobalPermissions> {
     if (this.globalPermissions) {
         return this.globalPermissions;
     }
@@ -31,12 +32,12 @@ export class Permissions {
 
   async getExtensionPermissions(): Promise<Record<string, any>> {
     const all = await this.fetchGlobalPermissions();
-    return all[AppConfig.EXTENSION_KEY] ?? {};
+    return all[this.extensionKey] ?? {};
   }
 
   async canView(): Promise<boolean> {
     const perms = await this.getExtensionPermissions();
-    return perms['view'];
+    return perms['view'] === true;
   }
 
   async canCreateCustomCategory(): Promise<boolean> {
@@ -45,43 +46,48 @@ export class Permissions {
   }
 
   async canViewCustomData(): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['view custom data']) && perms['view custom data'].length > 0;
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'view custom data');
   }
 
   async canEditCustomData(): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['edit custom data']) && perms['edit custom data'].length > 0;
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'edit custom data');
   }
 
   async canDeleteCustomCategory(): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['delete custom category']) && perms['delete custom category'].length > 0;
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'delete custom category');
   }
 
   async canAdministerPersons(): Promise<boolean> {
     const all = await this.fetchGlobalPermissions();
     return all['churchcore']?.['administer persons'] === true;
-    }
+  }
 
   async canViewCustomDataForCategory(categoryId: number): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['view custom data']) && perms['view custom data'].includes(categoryId);
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'view custom data', categoryId);
   }
 
   async canCreateCustomDataForCategory(categoryId: number): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['create custom data']) && perms['create custom data'].includes(categoryId);
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'create custom data', categoryId);
   }
 
   async canEditCustomDataForCategory(categoryId: number): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['edit custom data']) && perms['edit custom data'].includes(categoryId);
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'edit custom data', categoryId);
   }
 
   async canDeleteCustomDataForCategory(categoryId: number): Promise<boolean> {
-    const perms = await this.getExtensionPermissions();
-    return Array.isArray(perms['delete custom data']) && perms['delete custom data'].includes(categoryId);
+    return this.hasArrayPermission(await this.getExtensionPermissions(), 'delete custom data', categoryId);
   }
+
+
+  private hasArrayPermission(
+    perms: Record<string, any>,
+    key: string,
+    categoryId?: number
+  ): boolean {
+    const value = perms[key];
+    if (!Array.isArray(value)) return false;
+    return categoryId !== undefined ? value.includes(categoryId) : value.length > 0;
+  }
+
 
 }
