@@ -13,6 +13,9 @@ is breaking and a patch is not.
   `PageHeader`, `PersonPicker` (with the type `PersonOption`), `Pill`, `SecretField`, `StatusLine`, `Toggle`,
   `useConfirm`, and the theme `theme.css`. Design-system classes and tokens are prefixed `ceu-` / `--ceu-*`, the root
   class is `.ceu`.
+- `ct-extension-utils/guards` (Node only, not part of the browser entry): `hostClassViolations(dir)` and
+  `motionViolations(dir)` scan the `.vue` and `.css` files of a consumer for host-stylesheet class clashes and for
+  transitions or animations that bypass `--ceu-transition`; `HOST_UTILITIES` is the list of clashing names.
 - Tests that keep the library closed (`vue` and `@mdi/js` only) and the theme rules in place.
 
 ### Removed

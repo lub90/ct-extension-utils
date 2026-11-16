@@ -1,6 +1,6 @@
 /**
  * This package is a closed library: `src/` may import only from inside `src/`, `vue` and `@mdi/js`. Labels come in as
- * props; there is no i18n, router or app code in here.
+ * props; there is no i18n, router or app code in here. Only src/guards (Node only) may import node:fs and node:path.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,6 +8,9 @@ import { describe, expect, it } from 'vitest';
 
 const UI = path.resolve('src');
 const ALLOWED_PACKAGES = ['vue', '@mdi/js'];
+// The exported guards (src/guards, Node only, never part of the browser entry) read files.
+const NODE_BUILTINS = ['node:fs', 'node:path'];
+const GUARDS = path.join(UI, 'guards') + path.sep;
 
 function files(dir: string): string[] {
     return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -35,6 +38,7 @@ function violation(file: string, spec: string): boolean {
         const target = path.resolve(path.dirname(file), spec);
         return target !== UI && !target.startsWith(UI + path.sep);
     }
+    if (file.startsWith(GUARDS) && NODE_BUILTINS.includes(spec)) return false;
     return !ALLOWED_PACKAGES.some((p) => spec === p || spec.startsWith(p + '/'));
 }
 
