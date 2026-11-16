@@ -1,0 +1,40 @@
+{
+    "name": "ct-extension-utils",
+    "version": "0.1.0",
+    "description": "Vue design system (components, composables, theme) for ChurchTools extensions. Source only.",
+    "license": "MIT",
+    "type": "module",
+    "files": ["src"],
+    "exports": {
+        ".": "./src/index.ts",
+        "./theme.css": "./src/theme.css",
+        "./guards": "./src/guards/index.ts"
+    },
+    "scripts": {
+        "test": "vitest run",
+        "lint": "eslint .",
+        "typecheck": "vue-tsc --noEmit",
+        "check": "npm run lint && npm run typecheck && npm test && node --test 'scripts/*.test.mjs'"
+    },
+    "peerDependencies": {
+        "@mdi/js": "^7.4.0",
+        "vue": "^3.5.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@mdi/js": "^7.4.47",
+        "@types/node": "^26.6.6",
+        "@vitejs/plugin-vue": "^6.0.11",
+        "@vue/eslint-config-typescript": "^14.9.0",
+        "@vue/test-utils": "^2.5.1",
+        "eslint": "^10.15.0",
+        "eslint-plugin-vue": "^10.12.1",
+        "jsdom": "^29.1.1",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.72.2",
+        "vite": "^8.3.8",
+        "vitest": "^5.1.0",
+        "vue": "^3.5.45",
+        "vue-tsc": "^3.3.14"
+    }
+}
