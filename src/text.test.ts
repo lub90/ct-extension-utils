@@ -17,3 +17,10 @@ describe('isolate', () => {
         expect(isolate(kept)).toBe(`\u2068${kept}\u2069`);
     });
 });
+
+describe('package entry', () => {
+    it('exports isolate, so consumers can isolate names in their own dialog texts', async () => {
+        const entry = await import('./index');
+        expect((entry as Record<string, unknown>).isolate).toBe(isolate);
+    });
+});

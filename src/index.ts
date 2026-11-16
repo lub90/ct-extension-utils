@@ -16,3 +16,4 @@ export { default as PageFrame } from './PageFrame.vue';
 export type { NavItem } from './PageFrame.vue';
 export { default as PersonPicker } from './PersonPicker.vue';
 export type { PersonOption } from './PersonPicker.vue';
+export { isolate } from './text';

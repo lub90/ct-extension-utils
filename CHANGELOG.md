@@ -11,7 +11,8 @@ is breaking and a patch is not.
   dependencies `vue` and `@mdi/js`; CI and the pre-commit privacy check.
 - The design system: `Banner`, `ChoiceCard`, `ConfirmDialog`, `Field`, `Icon`, `LinkCard`, `PageFrame`,
   `PageHeader`, `PersonPicker` (with the type `PersonOption`), `Pill`, `SecretField`, `StatusLine`, `Toggle`,
-  `useConfirm`, and the theme `theme.css`. Design-system classes and tokens are prefixed `ceu-` / `--ceu-*`, the root
+  `useConfirm`, `isolate` (wraps a text in a first-strong isolate for plain-text dialog texts), and the theme
+  `theme.css`. Design-system classes and tokens are prefixed `ceu-` / `--ceu-*`, the root
   class is `.ceu`.
 - `ct-extension-utils/guards` (Node only, not part of the browser entry): `hostClassViolations(dir)` and
   `motionViolations(dir)` scan the `.vue` and `.css` files of a consumer for host-stylesheet class clashes and for

@@ -41,7 +41,7 @@ test: {
 
 | Import | Contents |
 | --- | --- |
-| `ct-extension-utils` | the components (`Banner`, `Icon`, `PageFrame`, `PersonPicker`, ...), `useConfirm` and the types |
+| `ct-extension-utils` | the components (`Banner`, `Icon`, `PageFrame`, `PersonPicker`, ...), `useConfirm`, `isolate` and the types |
 | `ct-extension-utils/theme.css` | the theme: tokens `--ceu-*` and the classes `ceu-*` under `.ceu` |
 | `ct-extension-utils/guards` | test guards a consumer runs against its own sources |
 
