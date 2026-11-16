@@ -40,4 +40,13 @@ describe('package', () => {
         expect(pkg.peerDependencies).toEqual({ vue: '^3.5.0', '@mdi/js': '^7.4.0' });
         expect(pkg.scripts.prepare).toBeUndefined();
     });
+
+    // Vite's dev server pre-bundles the .ts part of the entry (useConfirm) apart from the .vue files that import it
+    // relatively: two copies of the confirm state, and useConfirm() never reaches ConfirmDialog. Consumers must exclude it.
+    it('the README tells consumers to exclude the package from Vite\u2019s dependency pre-bundling', () => {
+        const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
+        const setup = readme.slice(readme.indexOf('## Setup in the consumer'), readme.indexOf('## Entries'));
+        expect(setup).toMatch(/optimizeDeps:\s*\{\s*exclude:\s*\['ct-extension-utils'\]\s*\}/);
+        expect(setup).not.toMatch(/nothing else to configure/);
+    });
 });

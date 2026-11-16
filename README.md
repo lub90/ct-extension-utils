@@ -28,7 +28,14 @@ npm install github:lub90/ct-extension-utils#v0.1.0
 
 The package contains `.ts`, `.vue` and `.css` source, no build output.
 
-- Vite compiles it as part of your app (with `@vitejs/plugin-vue`); nothing else to configure for the build.
+- Vite compiles it as part of your app (with `@vitejs/plugin-vue`). Exclude it from the dev server's dependency
+  pre-bundling in `vite.config.ts`. Otherwise Vite bundles the entry's `.ts` modules apart from the `.vue` files that
+  import them, the dev server holds two copies of module state, and `useConfirm()` never reaches `ConfirmDialog`:
+
+```ts
+optimizeDeps: { exclude: ['ct-extension-utils'] },
+```
+
 - Vitest must not treat it as an external dependency. Add it to the inline list in `vitest.config.ts`:
 
 ```ts
